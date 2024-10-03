@@ -1,2 +1,184 @@
 @import url(./modern-normalize.css);
 
+:root {
+    --header-height: 6rem;
+    --header-padding-block: 1rem;
+    --card-status-height: 4rem;
+    --card-image-radius: 1rem;
+    --card-image-margin-block: 1rem;
+    --card-title-min-height: 5rem;
+    --card-inline-padding: 1rem;
+    --card-block-padding: 1rem;
+    --progress-height: 0.6rem;
+    --progress-thumb-height: 0.8rem;
+}
+
+body {
+    position: relative;
+    min-height: 100svh;
+    min-width: 100dvw;
+}
+
+h2 {
+    margin-block: 0.2rem;
+    font-size: 1.4rem;
+    line-height: 1.25;
+}
+
+h3 {
+    margin-block: 0.2rem;
+    line-height: 1.25;
+}
+
+h4 {
+    margin-block: 0.1rem;
+    font-weight: 700;
+}
+
+h5 {
+    margin-block: 0.1rem 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 75 0;
+}
+
+h6 {
+    margin-block: 0.1rem;
+    font-size: 0.8rem;
+}
+
+p {
+    margin-block: 0.3rem;
+    font-weight: 500;
+    filter: opacity(0.8);
+}
+
+input[type='range'] {
+    accent-color: #fa99dd;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    cursor: pointer;
+}
+
+header {
+    z-index: 10;
+    background: white;
+    position: fixed;
+    padding: var(--header-padding-block) 6rem;
+    height: var(--header-height);
+    width: 100%;
+}
+
+.main-container {
+    position: relative;
+    top: calc(var(--header-height) + var(--header-padding-block));
+    padding: 0 4rem 0 8rem;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem 3rem;
+}
+
+.books-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, auto));
+    grid-auto-rows: auto;
+    grid-column: 1;
+    gap: 1rem 2rem;
+}
+
+.card {   
+    border-radius: 1.5rem;    
+    padding: var(--card-block-padding) var(--card-inline-padding);  
+    min-width: fit-content;
+    display: grid;
+    background: rgb(236, 236, 236);
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) -0.15rem -0.25rem 0px inset;
+}
+
+/* .card > :not(img, .card-status) {
+    padding-inline: var(--card-inline-padding);
+} */
+    
+.card-status {
+    margin-inline: auto;
+    min-width: fit-content;
+    height: var(--card-status-height);
+    width: 80%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    justify-content: space-between;
+    gap: 0.25rem;
+}
+
+.card-status:has(.reading) {
+    align-items: end;
+}
+
+.card-status:has(.not-read, .read) {
+    grid-template-columns: 1fr;
+    align-items: center;
+    text-align: center;
+}
+
+.card-status > .reading {
+    color: #fa99dd;
+}
+
+.card-status > .read {
+    color: #009b00;
+}
+
+.card-status > .not-read {
+    color: #e34100;
+}
+
+.card-status-page {
+    text-align: center;
+    opacity: 0.7;
+    font-weight: 700;
+}
+
+.card-status-progress-wrapper {
+    margin-top: 0.25rem;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-column: 1 / -1;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.card-status-progress {
+    /* overflow: hidden; */
+    border: none;
+    height: var(--progress-height);
+    border-radius: calc(var(--progress-height) / 2 );
+}
+
+.card-image {
+    width: 80%;
+    border-radius: var(--card-image-radius);
+    margin-block: var(--card-image-margin-block) calc(var(--card-image-margin-block) / 1.5);   
+    height: auto;
+    justify-self: center;    
+    box-shadow: 0.5rem 0.5rem 0.5rem #66330060;
+}
+
+.card-title {
+    min-height: var(--card-title-min-height);
+}
+
+.card-page-date-group {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+}
+
+.card-btns-group {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+form {
+    display: grid;
+}

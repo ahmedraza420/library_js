@@ -4,127 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <title>Library</title>
 </head>
 <body>
     <header>
-        Library
-        <button class="add-book-button">Add New Book</button>
+        <h1 class="header-logo">Library</h1>
+        <label class="book-toggle-container" title="Add a New Book" for="book-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="book-toggle-icon" viewBox="0 -960 960 960"><path d="M417-417H229q-26 0-44.5-18.5T166-480q0-26 18.5-44.5T229-543h188v-188q0-26 18.5-44.5T480-794q26 0 44.5 18.5T543-731v188h188q26 0 44.5 18.5T794-480q0 26-18.5 44.5T731-417H543v188q0 26-18.5 44.5T480-166q-26 0-44.5-18.5T417-229v-188Z"/></svg>
+            
+        </label>
     </header>
     <div class="main-container">
         <section class="books-display">
             <div class="card-wrapper">
                 <div class="card">
-                    <label for="" class="card-status">
-                        <h4 class="card-status-title reading">Reading</h4>
-                        <h6 class="card-status-page">Page <span class="card-status-number">127</span></h6>
-                        <!-- <span class="card-page-reading-label">Currently on</span> -->
-                        <div class="card-status-progress-wrapper">
-                            <button class="card-status-button" id="subPageBtn">−</button>
-                            <button class="card-status-button" id="addPageBtn">+</button>
-                            <input type="range" class="card-status-progress" value="127" min='0' max="652">
-                        </div>
-                    </label>
-                    <img src="./images/harry potter half blood prince book cover.jpg" alt="" class="card-image">
-                    <h3 class="card-title">Harry Potter and the Half-Blood Prince</h3>
-                    <h5 class="card-author">by J.K. Rowling</h5>
-                    <div class="card-page-date-group">
-                        <p class="card-pages">652 Pages</p>
-                        <p class="card-published">2005-07-16</p>
+                    <div class="card-left">
+                        <h4 class="card-status reading">Reading</h4>
+                        <img src="./images/harry potter half blood prince book cover.jpg" alt="" class="card-image">
                     </div>
-                    <div class="card-btns-group">
-                        <button class="card-button card-change-status" id="statusBtn">R</button>
-                        <button class="card-button card-remove" id="removeCardBtn">X</button>
+                    <div class="card-description">
+                        <div class="card-reading-wrapper">
+                            <div class="card-reading">
+                                <div class="card-reading-progress-wrapper">
+                                    <button class="card-status-button" id="subPageBtn">−</button>
+                                    <button class="card-status-button" id="addPageBtn">+</button>
+                                    <h6 class="card-reading-page">Page <span class="card-reading-number">127</span></h6>
+                                    <input type="range" class="card-reading-progress" value="127" min='0' max="652">
+                                </div>
+                            </div>    
+                            <label for="statusBtn" class="card-change-status-wrapper">
+                                <input type="checkbox" class="card-change-status" id="statusBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="more-icon" viewBox="0 -960 960 960" fill="#e8eaed"><path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/></svg>
+                                
+                            </label>
+                        </div>
+                        <h3 class="card-title">Harry Potter and the Half-Blood Prince</h3>
+                        <h5 class="card-author">by J.K. Rowling</h5>
+                        <div class="card-page-date-group">
+                            <p class="card-pages">652 Pages</p>
+                            <p class="card-published">2005-07-16</p>
+                        </div>
+                        <div class="card-btns-group">
+                            <button class="card-button card-remove" id="removeCardBtn"><svg xmlns="http://www.w3.org/2000/svg" class="delete-icon" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e8eaed"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg></button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-wrapper">
                 <div class="card">
-                    <label for="" class="card-status">
-                        <h4 class="card-status-title reading">Reading</h4>
-                        <h6 class="card-status-page">Page <span class="card-status-number">127</span></h6>
-                        <!-- <span class="card-page-reading-label">Currently on</span> -->
-                        <div class="card-status-progress-wrapper">
-                            <button class="card-status-button" id="subPageBtn">−</button>
-                            <button class="card-status-button" id="addPageBtn">+</button>
-                            <input type="range" class="card-status-progress" value="127" min='0' max="652">
-                        </div>
-                    </label>
                     <img src="./images/harry potter half blood prince book cover.jpg" alt="" class="card-image">
-                    <h3 class="card-title">Harry Potter and the Half-Blood Prince</h3>
-                    <h5 class="card-author">by J.K. Rowling</h5>
-                    <div class="card-page-date-group">
-                        <p class="card-pages">652 Pages</p>
-                        <p class="card-published">2005-07-16</p>
-                    </div>
-                    <div class="card-btns-group">
-                        <button class="card-button card-change-status" id="statusBtn">R</button>
-                        <button class="card-button card-remove" id="removeCardBtn">X</button>
+                    <div class="card-description">
+                        <div class="card-status-wrapper">
+                            <label for="" class="card-status">
+                                
+                                <h4 class="card-status-title read">Read</h4>
+                            </label>
+                            <button class="card-button card-change-status" id="statusBtn">R</button>
+                        </div>
+                        <h3 class="card-title">Harry Potter and the Half-Blood Prince</h3>
+                        <h5 class="card-author">by J.K. Rowling</h5>
+                        <div class="card-page-date-group">
+                            <p class="card-pages">652 Pages</p>
+                            <p class="card-published">2005-07-16</p>
+                        </div>
+                        <div class="card-btns-group">
+                            <button class="card-button card-remove" id="removeCardBtn"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e8eaed"><path d="M312-144q-29.7 0-50.85-21.15Q240-186.3 240-216v-480h-48v-72h192v-48h192v48h192v72h-48v479.57Q720-186 698.85-165T648-144H312Zm336-552H312v480h336v-480ZM384-288h72v-336h-72v336Zm120 0h72v-336h-72v336ZM312-696v480-480Z"/></svg></button>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-wrapper">
                 <div class="card">
-                    <label for="" class="card-status">
-                        <h4 class="card-status-title reading">Reading</h4>
-                        <h6 class="card-status-page">Page <span class="card-status-number">127</span></h6>
-                        <!-- <span class="card-page-reading-label">Currently on</span> -->
-                        <div class="card-status-progress-wrapper">
-                            <button class="card-status-button" id="subPageBtn">−</button>
-                            <button class="card-status-button" id="addPageBtn">+</button>
-                            <input type="range" class="card-status-progress" value="127" min='0' max="652">
-                        </div>
-                    </label>
                     <img src="./images/harry potter half blood prince book cover.jpg" alt="" class="card-image">
-                    <h3 class="card-title">Harry Potter and the Half-Blood Prince</h3>
-                    <h5 class="card-author">by J.K. Rowling</h5>
-                    <div class="card-page-date-group">
-                        <p class="card-pages">652 Pages</p>
-                        <p class="card-published">2005-07-16</p>
-                    </div>
-                    <div class="card-btns-group">
-                        <button class="card-button card-change-status" id="statusBtn">R</button>
-                        <button class="card-button card-remove" id="removeCardBtn">X</button>
+                    <div class="card-description">
+                        <div class="card-status-wrapper">
+                            <label for="" class="card-status">
+                                <h4 class="card-status-title not-read">Not Read Yet</h4>
+                            </label>
+                            <button class="card-button card-change-status" id="statusBtn">R</button>
+                        </div>
+                        <h3 class="card-title">Harry Potter and the Half-Blood Prince</h3>
+                        <h5 class="card-author">by J.K. Rowling</h5>
+                        <div class="card-page-date-group">
+                            <p class="card-pages">652 Pages</p>
+                            <p class="card-published">2005-07-16</p>
+                        </div>
+                        <div class="card-btns-group">
+                            <button class="card-button card-remove" id="removeCardBtn">X</button>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </section>
         <aside class="sidebar">
+            <input type="checkbox" name="" id="book-toggle">
             <form action="">
-                <label for="">
+                <h2 class="sidebar-heading">Add a New Book</h2>
+                <label for="image-url">
                     <span class="label">Image Url</span>
                     <input type="url" name="" id="image-url" placeholder="">
                 </label>
-                <label for="">
+                <label for="title">
                     <span class="label">Title</span>
-                    <input type="text" id="title">
+                    <input type="text" id="title" placeholder="">
                 </label>
-                <label for="">
+                <label for="author">
                     <span class="label">Author</span>
-                    <input type="text" id="author">
+                    <input type="text" id="author" placeholder="">
                 </label>
-                <label for="">
+                <label for="pages">
                     <span class="label">Number of Pages</span>
-                    <input type="number" id="pages">
+                    <input type="number" id="pages" placeholder="">
                 </label>
-                <label for="">
+                <label for="status">
                     <span class="label">Read?</span>
-                    <input type="checkbox" name="" id="status">
+                    <input type="checkbox" name="" id="status" placeholder="">
                 </label>
-                <label for="">
+                <label for="current-page">
                     <span class="label">Number of Pages Read</span>
-                    <input type="number" name="" id="current-page">
+                    <input type="number" name="" id="current-page" placeholder="">
                 </label>
-                <label for="">
+                <label for="publish-date">
                     <span class="label">Publication Date</span>
-                    <input type="date" name="" id="publish-date">
+                    <input type="date" name="" id="publish-date" placeholder="">
                 </label>
                 <button id="submit">Add Book</button>
     </form>
         </aside>
-        <section class="form-section">
-        </section>
     </div>
     <script src="script.js"></script>
 </body>

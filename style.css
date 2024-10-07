@@ -9,13 +9,14 @@
 */
 
 
-    --bg-primary: #fceded;
+    --bg-primary: #fbf9f1;
     --bg-secondary: #E3E1D9;
-    --bg-accent: #fcfff4;
+    --bg-accent: #AAB396;
     --bg-accent-2: #789395;
+    --bg-accent-2-hovered: #668082;
     --bg-accent-3: #DDDDDD;
-    --bg-card: #E8EFEB;
-    --txt-primary: #424642;
+    --bg-card: #F7EED3;
+    --txt-primary: #674636;
     --txt-read: #636363;
     --txt-reading: #375f93;
     --txt-not-read: #006b09;
@@ -28,14 +29,16 @@
     --card-image-radius: 1rem;
     --card-image-margin-block: 1rem;
     --card-title-min-height: 5rem;
-    --card-inline-padding: 1rem;
+    --card-inline-padding: 0.5rem;
     --card-block-padding: 1rem;
     --progress-height: 0.6rem;
     --progress-thumb-height: 0.8rem;
     --input-height: 2rem;
     --sidebar-width: 22rem;
-    --shadow-color: #bababa;
+    /* --shadow-color: #e8d5d5; */
+    --shadow-color: rgb(0 0 0 / 0.1);
     --shadow-color-2: #f8f8f8;
+    --card-status-height: 2rem;
 }
 
 body {
@@ -85,7 +88,7 @@ p {
 }
 
 input[type='range'] {
-    accent-color: var(--bg-accent-2);
+    accent-color: var(--bg-accent);
     width: 100%;
 }
 
@@ -94,7 +97,7 @@ input[type='range']::-webkit-slider-thumb {
 }
 
 header {
-    z-index: 1  ;
+    z-index: 3;
     position: fixed;
     padding-block: var(--header-padding-block);
     padding-inline: 6rem 3rem;
@@ -104,7 +107,7 @@ header {
     justify-content: space-between;
     align-items: center;
     background: var(--bg-accent);
-    box-shadow: 0.1rem 0.15rem 0.1rem var(--shadow-color);
+    box-shadow: 0.2rem 0.3rem 0.1rem var(--shadow-color);
 }
 
 .book-toggle-container {
@@ -120,7 +123,7 @@ header {
 }
 
 .book-toggle-container:hover {
-    background: var(--bg-card); 
+    backdrop-filter: brightness(130%); 
 }
 
 .book-toggle-icon {
@@ -190,38 +193,117 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     min-height: var(--card-min-height);
     min-width: fit-content;
     display: grid;
-    grid-template-columns: 3fr minmax(10rem , 4fr);
-    gap: 1.5rem;
-    /* background: var(--bg-card); */
+    grid-template-columns: 3fr minmax(9rem , 4fr);
+    gap: 0.5rem;
+    background: var(--bg-card);
     /* box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) -0.15rem -0.25rem 0px inset; */
     /* box-shadow: 0 0 0.2rem var(--shadow-color); */
-    box-shadow: 0.05rem 0.05rem 0.1rem var(--shadow-color),
-    -0.05rem -0.05rem 0.1rem 0 white;
+    /* box-shadow: 0.05rem 0.05rem 0.1rem var(--shadow-color),
+    -0.05rem -0.05rem 0.1rem 0 white; */
+    box-shadow: 0.05rem 0.05rem 0.1rem 0.1rem var(--shadow-color); 
     transition: all 0.2s ease;
 }
 
 .card:hover {
-    box-shadow: 0.3rem 0.3rem 0.6rem -0.25rem var(--shadow-color),
-    -0.3rem -0.3rem 0.3rem -0.1rem white;
+    /* box-shadow: 0.3rem 0.3rem 0.6rem -0.25rem var(--shadow-color),
+    -0.3rem -0.3rem 0.3rem -0.1rem white; */
+    box-shadow: 0.1rem 0.1rem 0.25rem 0.2rem var(--shadow-color  );
 }
 
 .card p {
     font-size: 0.9rem;
 }
 
-.card-button {
+.card-page-change-button, .card-button {
     border: none;
-    padding: 0;
     height: min-content;
+    display: flex;
+    align-items: center;
     background: transparent;
 }
 
-.card-change-status {
-    display: none;
-    appearance: none;
+.card-button {
+    padding: 0;
 }
 
+.card-page-change-button {
+    fill: var(--txt-primary);
+    height: 2rem;
+    width: 2rem;
+}
+
+.card-change-status {
+display: none;
+appearance: none;
+}
+
+/* .card-status-select {
+    height: var(--card-status-height);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+} */
+
+.card-change-status-wrapper {
+    position: relative; 
+    height: var(--card-status-height);
+    /* height: var(--card-status-height); */
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+            
+.card-status-options {
+    position: absolute;
+    top: 0;
+    overflow: hidden;
+    margin-block: 0;
+    border-radius: 0.5rem;
+    padding: 0;
+    /* min-width: calc(100% + 1rem); */
+    width: 100%;
+    display: grid;
+    grid-auto-rows: var(--card-status-height);
+    /* background: var(--bg-accent-2); */
+    background: var(--bg-accent);
+    filter: brightness(110%);
+    list-style-type: none;
+}
+
+.card-status-option:is(.active) {
+    grid-row: 1;
+}
+
+.card-change-status-wrapper:has(.card-change-status:checked) .card-status-options {
+    box-shadow: 0.1rem 0.1rem 0.3rem grey;
+}
+    
+.card-change-status-wrapper:not(:has(.card-change-status:checked)) .card-status-option:not(.active) {
+    display: none;
+}
+
+
+.card-status-option{
+    border: none;
+    padding: 0 0.25rem;
+    text-align: center;
+    color: inherit;
+    background: transparent;
+    transition: all 0.15s ease;
+}    
+
+
+/* .card-status-option ~ .card-status-option {
+    border-top: 0.1rem solid #bbbbbb;
+}     */
+
+.card-status-option:hover {
+    /* background: var(--bg-accent-2-hovered); */
+    backdrop-filter: brightness(90%);
+} 
+
 .more-icon {
+    z-index: 1;
     fill: var(--txt-primary);
     height: 1.5rem;
 }
@@ -240,10 +322,12 @@ body:has(#book-toggle:checked) .book-toggle-heading {
 }
 
 .card-status-wrapper {
+    margin-bottom: 0.75rem;
     display: grid;
     grid-template-columns: 1fr auto;
+    align-items: center;
     gap: 0.5rem;
-    border-bottom: 1px solid #bbbbbb;
+    /* border-bottom: 1px solid #bbbbbb; */
 }
 
 .reading {
@@ -281,6 +365,11 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     border-radius: calc(var(--progress-height) / 2 );
 }
 
+.card-reading-info {
+    display: flex;
+    align-items: center;
+}
+
 .card-reading-page {
     display: inline;
     margin-left: 0.5rem;
@@ -299,9 +388,10 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     /* box-shadow: 0.5rem 0.5rem 0.5rem #66330060; */
 }
 
-/* .card-title {
-    min-height: var(--card-title-min-height);
-} */
+.card-title {
+    margin-top: auto;
+    /* min-height: var(--card-title-min-height); */
+}
 
 .card-page-date-group {
     margin-bottom: auto;
@@ -311,40 +401,54 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     gap: 0.5rem 1rem;
 }
 
-.card-btns-group {
-    display: flex;
-    justify-content: space-around;
-}
-
 .sidebar {
-    /* min-height: calc(100svh - var(--header-height) - var(--header-padding-block) * 2); */
     z-index: 2;
+    position: relative;
+    /* left: 100%; */
+    /* min-height: calc(100svh - var(--header-height) - var(--header-padding-block) * 2); */
     min-height: calc(100svh - var(--header-height));
     height: 100%;
     width: 0;
-    background: var(--bg-accent);
-    box-shadow: -0.15rem 0.1rem 0.1rem var(--shadow-color);
+    /* background: var(--bg-accent); */
+    /* box-shadow: -0.15rem 0.1rem 0.1rem var(--shadow-color); */
+    /* box-shadow: -0.3rem 0.2rem 0.1rem var(--shadow-color); */
+    border-left: 1px solid var(--bg-accent);
     transition: all 0.6s ease-in-out;   
 }
 
+.form-wrapper {
+    width: 0;
+    height: 0;
+    right: 0;
+    transition: all 0.6s ease-in-out;
+}
+
+.sidebar:has(#book-toggle:checked) .form-wrapper {
+    /* min-height: inherit; */
+    position: fixed;
+    overflow: auto;
+    height: calc(100svh - var(--header-height));
+    width: var(--sidebar-width);
+    padding-block: var(--header-padding-block);
+    padding-inline: 2rem;
+}
+
 .sidebar form{
-    position: absolute;
+    /* position: absolute; */
     opacity: 0;
     display: none;
-    transition: all 0.3s ease-in-out;   
+    /* transition: all 0.3s ease-in-out;    */
 }
 
 .sidebar:has(#book-toggle:checked) {
-    position: relative;
-    padding-block: var(--header-padding-block);
-    padding-inline: 2rem;
+    /* position: relative; */
+    left: 0;
     width: var(--sidebar-width);
 }
 
 .sidebar:has(#book-toggle:checked) form {
-    opacity: 1;
-    position: fixed;
     display: grid;
+    opacity: 1;
 }
 
 #book-toggle {
@@ -358,8 +462,9 @@ body:has(#book-toggle:checked) .book-toggle-heading {
 
 form {
     margin-top: var(--input-height);
-    gap: var(--input-height);
-    transition: opacity 0.3s ease;
+    width: calc(var(--sidebar-width) / 1.5);
+    /* gap: var(--input-height); */
+    transition: opacity 0.6s ease;
 }
 
 form label {
@@ -367,22 +472,39 @@ form label {
     position: relative;
 }
 
+form label, form button {
+    margin-top: var(--input-height);
+}
+
 form label input {
-    height: 100%;
     border: none;
+    height: 100%;
     padding-left: 0.5rem;
     background-color: var(--bg-accent-3);
     border-radius: 0.25rem;
 }
 
-form  label:not([for='publish-date'], [for='status']) .label{
+form label input:not([name="status"]) {
+    width: 100%;
+}
+
+form  label .label{
     position: absolute;
     top: calc((var(--input-height) - 1rem) / 2);
     left: 0.25rem;
     transition: all 0.3s ease-in-out;
 }
 
-form label:not([for='publish-date'], [for='status']):focus-within .label, form label:not([for='publish-date'], [for='status'], :has(input:placeholder-shown)) .label  {
+/* form label:has(input[name='status']) {
+    margin-top: calc(var(--input-height) - 1.5rem / 2);
+} */
+
+form label:is([for='publish-date']) .label {
+    top: calc(-1 * var(--input-height) + 1.5rem / 2);
+    left: 0;
+}
+
+form label:not([for='publish-date'], :has(label input)):focus-within .label, form label:not([for='publish-date'], :has(input:placeholder-shown), label input) .label  {
     top: calc(-1 * var(--input-height) + 1.5rem / 2);
     left: 0;
     transition: all 0.3s ease-in-out;
@@ -392,16 +514,50 @@ form label:not(:has(input:placeholder-shown), :focus-within) .label {
     opacity: 0.5;
 }
 
-form label:has(#status) {
+form label[for='publish-date'] {
     display: flex;
+    flex-flow: column nowrap;
+    gap: 0.2rem;
+}
+
+form label[for='publish-date'] input {
+    line-height: 2;
+}
+
+form label:has(label .label) {
+    margin-top: calc(var(--input-height) + 0.5rem);
+}
+
+form label:has(label .label) .label {
+    top: calc(-1 * var(--input-height) + 0.5rem);
+}
+
+form label:has(label) {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
+}
+
+form label label:has(input) {
+    margin-top: 0;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+form label label .label {
+    position: static;
 }
 
 form label:has(#current-page) {
     display: none;
 }
 
-form label:has(#status:checked) ~ label:has(#current-page) {
+form label:has(#reading:checked) ~ label:has(#current-page) {
     display: flex;
+}
+
+
+form button {
+    height: var(--input-height);
 }

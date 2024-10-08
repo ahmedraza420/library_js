@@ -8,11 +8,10 @@ const statusInputs = document.querySelectorAll('input[name="status"]');
 const inputCurrPage = document.querySelector('#current-page');
 const inputPubDate = document.querySelector('#publish-date');
 const booksDisplay = document.querySelector('.books-display');
-// const changeStatusLabel = document.querySelector('.card-change-status-wrapper');
-// const changeStatusCheckbox = document.querySelector('.card-change-status');
-// const bookStatusBtns = document.querySelectorAll('.card-status-option');
 
 let myLibrary = [];
+let booksDeleted = [];  // could be used to undo a mistake
+
 myLibrary.push(new Book("https://i.pinimg.com/originals/60/4e/7b/604e7b5567961081bb4d41e0c6e43d71.png", "Harry Potter and The Half Blood Prince", "J.K. Rowling", "607", "reading", "109", "2005-07-16"));
 myLibrary.push(new Book("https://i0.wp.com/americanwritersmuseum.org/wp-content/uploads/2018/02/CK-3.jpg?resize=267%2C400&ssl=1", "The Great Gatsby", "F. Scott Fitzgerald", "180", "not-read", "0", "1925-04-05"));
 
@@ -27,12 +26,13 @@ function Book(image, title, author, pages, status, currentPage, publishDate) {
 }
 
 function addBookToLibrary() {
+    
     let inputStatus = 'not-read';
     statusInputs.forEach(i => {
         if(i.checked == true) {
-          inputStatus = i.getAttribute('id');
+            inputStatus = i.getAttribute('id');
         }
-      });
+    });
     let currentPage;
     if(inputStatus != 'reading' || inputCurrPage.value == '') { 
         currentPage = 0;
@@ -41,19 +41,25 @@ function addBookToLibrary() {
         currentPage = inputCurrPage.value;
     }
 
-    const bookToAdd = new Book(inputImage.value, inputTitle.value, inputAuthor.value, inputPages.value, inputStatus, currentPage, inputPubDate.value);
-    myLibrary.push(bookToAdd);
-    refreshCards();
+    if (inputTitle.value != '' && inputAuthor.value != '' && inputPages.value != '' && inputStatus && inputPubDate.value != '') {
+        
+        const bookToAdd = new Book(inputImage.value, inputTitle.value, inputAuthor.value, inputPages.value, inputStatus, currentPage, inputPubDate.value);
+        
+        if (!myLibrary.some(book => book.title == bookToAdd.title && book.author == bookToAdd.author)) {
+            myLibrary.push(bookToAdd);
+            refreshCards();
+        }
+    }
 }
 
-function createCard(item) {
+function createCard(item, index) {
     const cardWrap = document.createElement('div');
     cardWrap.classList.add('card-wrapper');
+    cardWrap.dataset.index = index; // new concept for me. specially, HTML's (data-my-name = 'raza') being used as (dataset.myName) in js
 
     const card = `
-        <div class="card-wrapper">
                     <div class="card">
-                        <img src="" alt="" class="card-image">
+                        <img src="" alt="" class="card-image" onerror="this.src='./images/book-cover-placeholder.png'; this.style.border = '5px solid currentColor'">
                         <div class="card-description">
                             <div class="card-status-wrapper"> 
                                     <div class="card-change-status-wrapper">
@@ -87,49 +93,42 @@ function createCard(item) {
                             </div>   
                         </div>
                     </div>
-                </div>
     `;
     cardWrap.innerHTML = card;
-    const img = cardWrap.querySelector('.card-image');
-    const cardTitle = cardWrap.querySelector('.card-title');
-    const cardAuthor = cardWrap.querySelector('.card-author');
-    const cardPages = cardWrap.querySelector('.card-pages');
-    const cardPubDate = cardWrap.querySelector('.card-published');
-    const statusLabel = cardWrap.querySelector('.card-change-status-wrapper');
-    const statusOptions = cardWrap.querySelectorAll('.card-status-option');
-    const cardDesc = cardWrap.querySelector('.card-description');
     
+    cardWrap.querySelector('.card-image').setAttribute('src', item.image);
+    cardWrap.querySelector('.card-title').innerText = item.title;
+    cardWrap.querySelector('.card-author').innerText = item.author;
+    cardWrap.querySelector('.card-pages').innerText = item.pages + " Pages";
+    cardWrap.querySelector('.card-published').innerText = item.publishDate;
+    
+    const cardDesc = cardWrap.querySelector('.card-description');    
+    
+    statusCheckboxToggle(cardWrap.querySelector('.card-change-status-wrapper'));
+    selectStatusOption(item, cardDesc, cardWrap.querySelectorAll('.card-status-option'));
+    setReadingStatus(item, cardDesc);
+    setButtonActions(item, cardDesc);
     if (item.status != "reading") 
         {
             cardDesc.querySelector('.card-reading').style.visibility = 'hidden';
         }
-    
-    img.setAttribute('src', item.image);
-    cardTitle.innerText = item.title;
-    cardAuthor.innerText = item.author;
-    cardPages.innerText = item.pages + " Pages";
-    cardPubDate.innerText = item.publishDate;
-    
-    statusCheckboxToggle(statusLabel);
-    selectStatusOption(item, cardDesc, statusOptions);
-    setReadingStatus(item, cardDesc);
-    setButtonActions(item, cardDesc);
-    
 
+    cardWrap.querySelector("#removeCardBtn").addEventListener('click', () => {deleteBook(cardWrap)});
+        
     booksDisplay.appendChild(cardWrap);
 }
 
 form.addEventListener('submit', e => {
     e.preventDefault();
     addBookToLibrary();
-    console.log(myLibrary);
+    // console.log(myLibrary);
 });
 
 function refreshCards () {
     document.querySelectorAll('.card-wrapper').forEach(item => {item.remove()});
     
-    for (item of myLibrary) {
-        createCard(item);
+    for (i in myLibrary) {
+        createCard(myLibrary[i], i);
     }
 } 
 
@@ -228,6 +227,11 @@ function buttonHold(holdFunction, holdElement) {
         holdElement.addEventListener('mouseup', () => {
             clearInterval(holdInterval)
         });
+}
+
+function deleteBook (cardWrap) {
+    booksDeleted.push(myLibrary.splice(cardWrap.dataset.index, 1)[0]);
+    refreshCards();
 }
 
 refreshCards();

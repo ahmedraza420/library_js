@@ -40,8 +40,8 @@ function addBookToLibrary() {
     else {
         currentPage = inputCurrPage.value;
     }
-
-    if (inputTitle.value != '' && inputAuthor.value != '' && inputPages.value != '' && inputStatus && inputPubDate.value != '') {
+    // REMINDER: need to output the validation errors
+    if (inputTitle.value != '' && inputAuthor.value != '' && inputPages.value != '' && parseInt(inputPages.value) > 0  && inputStatus && inputPubDate.value != '' && parseInt(inputPages.value) >= parseInt(currentPage)) {
         
         const bookToAdd = new Book(inputImage.value, inputTitle.value, inputAuthor.value, inputPages.value, inputStatus, currentPage, inputPubDate.value);
         
@@ -55,11 +55,11 @@ function addBookToLibrary() {
 function createCard(item, index) {
     const cardWrap = document.createElement('div');
     cardWrap.classList.add('card-wrapper');
-    cardWrap.dataset.index = index; // new concept for me. specially, HTML's (data-my-name = 'raza') being used as (dataset.myName) in js
+    cardWrap.dataset.index = index; // new concept for me. specially, HTML's attribute like [data-my-name = 'raza'] being used as [dataset.myName] in js
 
     const card = `
                     <div class="card">
-                        <img src="" alt="" class="card-image" onerror="this.src='./images/book-cover-placeholder.png'; this.style.border = '5px solid currentColor'">
+                        <img src="" alt="" class="card-image" onerror="this.src='./images/book-cover-placeholder.png'; this.style.border = '2px solid currentColor'">
                         <div class="card-description">
                             <div class="card-status-wrapper"> 
                                     <div class="card-change-status-wrapper">
@@ -99,7 +99,12 @@ function createCard(item, index) {
     cardWrap.querySelector('.card-image').setAttribute('src', item.image);
     cardWrap.querySelector('.card-title').innerText = item.title;
     cardWrap.querySelector('.card-author').innerText = item.author;
-    cardWrap.querySelector('.card-pages').innerText = item.pages + " Pages";
+    if (parseInt(item.pages) > 1) {
+        cardWrap.querySelector('.card-pages').innerText = item.pages + " Pages";
+    }
+    else {
+        cardWrap.querySelector('.card-pages').innerText = item.pages + " Page";
+    }
     cardWrap.querySelector('.card-published').innerText = item.publishDate;
     
     const cardDesc = cardWrap.querySelector('.card-description');    
@@ -121,7 +126,6 @@ function createCard(item, index) {
 form.addEventListener('submit', e => {
     e.preventDefault();
     addBookToLibrary();
-    // console.log(myLibrary);
 });
 
 function refreshCards () {
@@ -174,24 +178,25 @@ function selectStatusOption(book, cardDesc, statusOptions)
 }
 
 function setReadingStatus(book, cardDesc) {
-    if (book.status == 'reading') { // setting up progress bar for the current reading page
+    if (book.status == 'reading') {
         const progress = cardDesc.querySelector('.card-reading-progress');
         const pageNumReading = cardDesc.querySelector('.card-reading-number');
 
         progress.setAttribute('max', book.pages);
-        progress.setAttribute('value', book.currentPage);   
+        progress.setAttribute('value', book.currentPage);
         pageNumReading.innerText = book.currentPage;
         
         progress.addEventListener('input', () => {
             progress.setAttribute('value', progress.value);   
-            pageNumReading.innerText = progress.value;
-            book.currentPage = progress.value;
+            if (parseInt(progress.value) <= parseInt(book.pages) && parseInt(progress.value) >= 0) {
+                pageNumReading.innerText = progress.value;
+                book.currentPage = progress.value;
+            }   
         });
     }
 }
-
+// Problem: the value of the book Objects should Decrease, and the progress bar and pageNumReading should update according to the book's currentPage.
 function setButtonActions (book, cardDesc) {
-        // Previous Page, Next Page functionality
         const progress = cardDesc.querySelector('.card-reading-progress');
         const pageNumReading = cardDesc.querySelector('.card-reading-number');
         const subBtn = cardDesc.querySelector("#subPageBtn");
@@ -200,9 +205,11 @@ function setButtonActions (book, cardDesc) {
         subBtn.addEventListener('mousedown', () => {
             const pagePrevious = () => {
                 if (book.status == 'reading') {
-                    progress.value--;
-                    book.currentPage = progress.value;
-                    pageNumReading.innerText = book.currentPage;
+                    if (parseInt(progress.value) > 0) {
+                        progress.value--;
+                        book.currentPage = progress.value;
+                        pageNumReading.innerText = book.currentPage;
+                    }
                 }
             }; 
             pagePrevious();
@@ -213,7 +220,9 @@ function setButtonActions (book, cardDesc) {
             const pageNext = () => {
                 if (book.status == 'reading') {
                     progress.value++;
-                    book.currentPage = progress.value;
+                    if (parseInt(progress.value) <= parseInt(book.pages)){
+                        book.currentPage = progress.value;
+                    }
                     pageNumReading.innerText = book.currentPage;
                 }
             };

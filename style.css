@@ -2,9 +2,10 @@
 
 :root {
     --bg-primary: #fbf9f1;
+    --bg-primary-500: rgb(251 249 241 / 0.5);
     --bg-secondary: #E3E1D9;
     --bg-accent: #AAB396;
-    --bg-accent-2: #789395;
+    --bg-accent-2: rgba(82, 93, 58, 0.668);
     --bg-accent-2-hovered: #668082;
     --bg-accent-3: #DDDDDD;
     --bg-card: #F7EED3;
@@ -380,7 +381,6 @@ appearance: none;
 .form-wrapper {
     width: 0;
     height: 0;
-    right: 0;
     transition: all var(--trans-t-medium) ease-in-out;
 }
 
@@ -399,7 +399,6 @@ appearance: none;
 }
 
 .sidebar:has(#book-toggle:checked) {
-    left: 0;
     width: var(--sidebar-width);
 }
 
@@ -534,4 +533,31 @@ form button:hover {
 form button:active {
     filter: none;
     box-shadow: 0.1rem 0.1rem 0.1rem var(--shadow-color-2);
+}
+
+@media only screen and (max-width: 750px) {
+    :root {
+        --sidebar-width: 18rem;
+    }
+
+    header {
+        padding-inline: var(--padding-medium);
+    }
+
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: absolute;
+        right: 0;
+        background: var(--bg-primary-500);
+        backdrop-filter: blur(7px);
+    }
+
+    .sidebar:has(#book-toggle:checked) .form-wrapper {
+        position: relative;
+        padding-inline: var(--padding-large);
+    }
+
 }

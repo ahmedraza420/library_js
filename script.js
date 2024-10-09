@@ -8,6 +8,7 @@ const statusInputs = document.querySelectorAll('input[name="status"]');
 const inputCurrPage = document.querySelector('#current-page');
 const inputPubDate = document.querySelector('#publish-date');
 const booksDisplay = document.querySelector('.books-display');
+const resetButton = document.querySelector('#form-reset');
 
 let myLibrary = [];
 let booksDeleted = [];  // could be used to undo a mistake
@@ -126,6 +127,7 @@ function createCard(item, index) {
 form.addEventListener('submit', e => {
     e.preventDefault();
     addBookToLibrary();
+    resetButton.click();
 });
 
 function refreshCards () {

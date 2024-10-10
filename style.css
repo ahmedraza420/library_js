@@ -637,6 +637,79 @@ form button:active {
     box-shadow: 0.1rem 0.1rem 0.1rem var(--shadow-color-2);
 }
 
+.sidebar:not(:has(#book-toggle:checked)) .form-wrapper .github-container {
+    display: none;
+}
+
+.github-container {
+    position: relative;
+    margin-top: 4rem;
+    margin-inline: auto;
+    width: fit-content; 
+}
+.github-container .github-tooltip {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  color: white;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%);
+  transition: all 0.3s ease;
+}
+ .github-container:hover .github-tooltip {
+  top: -2rem;
+  opacity: 1;
+  visibility: visible;
+}
+ .github-container a {
+  position: relative;
+  overflow: hidden;
+  left: 50%;
+  border-radius: 50%;
+  width: calc(var(--icon-height) * 1.5);
+  height: calc(var(--icon-height) * 1.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #4d4d4d;
+  background-color: #fff;
+  transform: translateX(-50%);
+  transition: all 0.3s ease-in-out;
+}
+.github-container a:hover {
+  box-shadow: 3px 2px 45px 0px rgb(0 0 0 / 12%);
+}
+ .github-container a svg {
+  position: relative;
+  z-index: 1;
+  width: calc(var(--icon-height) * 1.5);
+  height: calc(var(--icon-height) * 1.5);
+}
+.github-container a:hover {
+  color: white;
+}
+ .github-container a .filled {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: #000;
+  transition: all 0.3s ease-in-out;
+}
+.github-container a:hover .filled {
+  height: 100%;
+}
+ .github-container a[data-social="github"] .filled,
+ .github-container a[data-social="github"] ~ .github-tooltip {
+  background-color: #24262a;
+}
+
 @media only screen and (max-width: 750px) {
     :root {
         --sidebar-width: 18rem;

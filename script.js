@@ -16,6 +16,7 @@ let booksDeleted = [];  // could be used to undo a mistake
 
 myLibrary.push(new Book("https://i.pinimg.com/originals/60/4e/7b/604e7b5567961081bb4d41e0c6e43d71.png", "Harry Potter and The Half Blood Prince", "J.K. Rowling", "607", "reading", "109", "2005-07-16"));
 myLibrary.push(new Book("https://i0.wp.com/americanwritersmuseum.org/wp-content/uploads/2018/02/CK-3.jpg?resize=267%2C400&ssl=1", "The Great Gatsby", "F. Scott Fitzgerald", "180", "not-read", "0", "1925-04-05"));
+myLibrary.push(new Book("https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1409600899i/9723667.jpg", "And Then There Were None", "Agatha Christie", "272", "read", '0', '1939-11-06'));
 
 function Book(image, title, author, pages, status, currentPage, publishDate) {
     this.image = image;

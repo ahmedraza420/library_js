@@ -9,9 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     <title>Library</title>
 </head>
-<body>
+<body data-theme-dark>
     <header>
         <h1 class="header-logo">Library</h1>
+        <label class="theme-container">
+            <input type="checkbox" name="" id="theme-toggle" class="theme-toggle">
+            <div class="icon-circle">
+                <div class="icon-circle-inner"></div>
+                <div class="icon-crescent"></div>
+            </div>
+        </label>
         <label class="book-toggle-container" title="Add a New Book" for="book-toggle">
             <svg xmlns="http://www.w3.org/2000/svg" class="book-toggle-icon" viewBox="0 -960 960 960"><path d="M417-417H229q-26 0-44.5-18.5T166-480q0-26 18.5-44.5T229-543h188v-188q0-26 18.5-44.5T480-794q26 0 44.5 18.5T543-731v188h188q26 0 44.5 18.5T794-480q0 26-18.5 44.5T731-417H543v188q0 26-18.5 44.5T480-166q-26 0-44.5-18.5T417-229v-188Z"/></svg>
             <h5 class="book-toggle-heading">Add Book</h5>

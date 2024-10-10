@@ -4,12 +4,14 @@
     --bg-primary: #fbf9f1;
     --bg-primary-500: rgb(251 249 241 / 0.5);
     --bg-secondary: #E3E1D9;
-    --bg-accent: #AAB396;
+    --bg-accent: #d4cfc1;
+    /* --bg-accent: #CCD3CA; */
+    /* --bg-accent: #B7C4CF; */
     --bg-accent-2: rgba(82, 93, 58, 0.668);
     --bg-accent-2-hovered: #668082;
     --bg-accent-3: #DDDDDD;
     --bg-card: #F7EED3;
-    --txt-primary: #674636;
+    --txt-primary: #705C53;
     --color-warning: rgb(171, 44, 44);
     --header-height: 6rem;
     --card-min-height: 15rem;
@@ -53,6 +55,17 @@ body {
     font-family: 'outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background-color: var(--bg-primary);
     color: var(--txt-primary);
+    transition: all var(--trans-t-normal) ease;
+}
+
+body:has(.theme-toggle:checked) {
+    --bg-primary: #181C14;
+    --bg-primary-500: rgba(24 28 20 / 0.5);
+    --bg-accent: #3C3D37;
+    --txt-primary: #DCD7C9;
+    --shadow-color: rgb(0 0 0 / 0.4);
+    --shadow-color-2: rgb(0 0 0 / 0.6);
+
 }
 
 h1 {
@@ -108,13 +121,83 @@ header {
     padding-block: var(--paddinglarge);
     padding-inline: calc(var(--padding-large) * 2) var(--padding-large);
     height: var(--header-height);
+    /* width: 100svw; */
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: var(--gap-normal) var(--gap-large);  
     background: var(--bg-accent);
     box-shadow: 0 0.2rem 0.2rem var(--shadow-color);
 }
+
+.theme-container {
+    position: relative;
+    overflow: hidden;
+    fill: var(--txt-primary);
+    margin-left: auto;      
+    /* margin-right: var(--margin-large); */
+    height: calc(var(--icon-height) * 2);
+    width: calc(var(--icon-height) * 2);
+    aspect-ratio: 1 / 1;
+    border-radius: var(--b-radius-normal);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-primary);
+    box-shadow: 0.1rem 0.1rem 0.2rem var(--shadow-color);
+    transition: all var(--trans-t-normal) ease;
+}
+
+.theme-container:active {
+    box-shadow: 0 0 0.2rem var(--shadow-color);
+}
+
+.theme-toggle {
+    display: none;
+}
+
+.icon-circle {
+    position: relative;
+    height: 60%;
+    width: 60%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #7077A1;
+}
+
+.icon-circle-inner {
+    height: 65%;
+    width: 65%;
+    border-radius: 50%;
+    background-color: inherit;
+}
+
+.theme-container .icon-crescent {
+    position: absolute;
+    top: 0%;
+    right: -10%;
+    border-radius: 50%;
+    height: 80%;
+    width: 80%;
+    /* display: none; */
+    opacity: 1;
+    background-color: var(--bg-primary);
+    transition: all var(--trans-t-normal) ease, opacity var(--trans-t-small) ease;
+}
+
+.theme-container:has(.theme-toggle:checked) .icon-crescent {
+    top: -50%;
+    right: -50%;
+    opacity: 0;
+}
+
+.theme-container.theme-container:has(.theme-toggle:checked) .icon-circle {
+    background-color: rgba(238, 238, 101, 0.5);
+} 
 
 .book-toggle-container {
     position: relative;
@@ -129,14 +212,14 @@ header {
 }
 
 .book-toggle-container:hover {
-    backdrop-filter: brightness(130%); 
+    backdrop-filter: brightness(120%); 
 }
 
 .book-toggle-icon {
     position: relative;
     top: 0;
-    width: var(--input-height);
-    height: var(--input-height);
+    width: calc(var(--icon-height) * 1.5);
+    height: calc(var(--icon-height) * 1.5);
     fill: var(--txt-primary);
     transition: all var(--trans-t-normal) ease;
 }
@@ -173,7 +256,7 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     padding: var(--padding-large);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), auto));
-    grid-auto-rows: auto;
+    grid-auto-rows: min-content;
     justify-content: center;
     gap: var(--gap-medium) var(--gap-large);
     transition: all var(--trans-t-normal) ease;
@@ -192,6 +275,7 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     border-radius: var(--b-radius-medium);
     padding: var(--padding-medium);
     min-height: var(--card-min-height);
+    height: 100%;
     min-width: fit-content;
     display: grid;
     grid-template-columns: 3fr minmax(var(--card-desc-min-width) , 4fr);
@@ -221,6 +305,12 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     fill: var(--txt-primary);
     height: 2rem;
     width: 2rem;
+    border-radius: var(--b-radius-normal);
+    background-color: inherit;
+}
+
+.card-page-change-button:hover {
+    backdrop-filter: brightness(80%);
 }
 
 .card-change-status {
@@ -303,18 +393,6 @@ appearance: none;
     gap: var(--gap-small);
 }
 
-.reading {
-    color: var(--txt-reading);
-}
-
-.read {
-    color: var(--txt-read);
-}
-
-.not-read {
-    color: var(--txt-not-read);
-}
-
 .card-reading {
     margin-top: var(--margin-small);
     display: grid;
@@ -340,6 +418,7 @@ appearance: none;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: var(--gap-small);
 }
 
 .card-reading-page {
@@ -383,12 +462,12 @@ appearance: none;
 .form-wrapper {
     width: 0;
     height: 0;
-    transition: all var(--trans-t-medium) ease-in-out;
+    transition: all var(--trans-t-medium) ease-in-out, color none;
 }
 
 .sidebar:has(#book-toggle:checked) .form-wrapper {
     position: fixed;
-    overflow: auto;
+    overflow: hidden;
     height: calc(100svh - var(--header-height));
     width: var(--sidebar-width);
     padding-block: var(--padding-large);
@@ -420,7 +499,7 @@ appearance: none;
 
 form {
     margin-top: var(--input-height);
-    transition: all var(--trans-t-medium) ease;
+    transition: all var(--trans-t-medium) ease, color none;
 }
 
 form label {
@@ -449,9 +528,14 @@ form label input {
     border: none;
     height: 100%;
     padding-left: var(--padding-normal);
+    color: var(--txt-primary);
     background-color: var(--bg-primary);
     filter: brightness(80%);
     border-radius: var(--b-radius-small);
+}
+
+body:has(.theme-toggle:checked) form > label > input {
+    background-color: var(--bg-accent);
 }
 
 form label input:not([name="status"]) {
@@ -463,22 +547,24 @@ form  label .label{
     z-index: 1;
     top: calc((var(--input-height) - 1rem) / 2);
     left: var(--margin-small);
-    transition: all var(--trans-t-medium) ease-in-out;
+    scale: 1.05;
+    transition: all var(--trans-t-medium) ease-in-out, color none;
 }
 
 form label:is([for='publish-date']) .label {
-    top: calc(-1 * var(--input-height) + 1.5rem / 2);
+    top: calc(-1 * var(--input-height) + 1.25rem / 2);
     left: 0;
 }
 
 form label:not([for='publish-date'], :has(label input)):focus-within .label, form label:not([for='publish-date'], :has(input:placeholder-shown), label input) .label  {
-    top: calc(-1 * var(--input-height) + 1.5rem / 2);
+    top: calc(-1 * var(--input-height) + 1.25rem / 2);
     left: 0;
     transition: all var(--trans-t-normal) ease-in-out;
 }
 
 form label:not(:has(input:placeholder-shown), :focus-within) .label {
     opacity: 0.7;
+    scale: 1;
 }
 
 form label[for='publish-date'] {
@@ -559,6 +645,7 @@ form button:active {
 
     header {
         padding-inline: var(--padding-medium);
+        gap: var(--gap-medium);
     }
 
     .main-container {
@@ -581,6 +668,14 @@ form button:active {
         font-weight: 600;
     }
 
+    body:has(.theme-toggle:checked) form > label > input {
+        box-shadow: 0 0 0.5rem 0.5rem var(--shadow-color);
+    }
+
+    body:has(.theme-toggle:checked) form .label {
+        font-weight: 300;
+    }
+
 }
 
 @media only screen and (max-width: 450px) {
@@ -588,7 +683,13 @@ form button:active {
         --card-min-width: 16rem;
         --card-max-width: 23rem;
         --card-desc-min-width: 7rem;
+        --icon-height: 1rem;
     }
+
+    /* .theme-container {
+        height: calc(var(--icon-height) * 1.5);
+        width: calc(var(--icon-height) * 1.5);
+    } */
 
     .books-display {
         padding: var(--padding-medium);

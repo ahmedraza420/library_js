@@ -183,16 +183,16 @@ header {
     border-radius: 50%;
     height: 80%;
     width: 80%;
-    /* display: none; */
-    opacity: 1;
     background-color: var(--bg-primary);
-    transition: all var(--trans-t-normal) ease, opacity var(--trans-t-small) ease;
+    opacity: 1;
+    transition: all var(--trans-t-medium) ease;
 }
 
 .theme-container:has(.theme-toggle:checked) .icon-crescent {
     top: -50%;
     right: -50%;
     opacity: 0;
+    transition: all var(--trans-t-medium) ease, opacity var(--trans-t-normal) ease;
 }
 
 .theme-container.theme-container:has(.theme-toggle:checked) .icon-circle {
@@ -645,6 +645,7 @@ form button:active {
 
     header {
         padding-inline: var(--padding-medium);
+        width: 100svw;
         gap: var(--gap-medium);
     }
 
@@ -652,8 +653,12 @@ form button:active {
         grid-template-columns: 1fr;
     }
 
+    .card-reading {
+        opacity: 1;
+    }
+
     .sidebar {
-        position: absolute;
+        position: fixed;
         right: 0;
         background: var(--bg-primary-500);
         backdrop-filter: blur(5px);
@@ -683,17 +688,24 @@ form button:active {
         --card-min-width: 16rem;
         --card-max-width: 23rem;
         --card-desc-min-width: 7rem;
-        --icon-height: 1rem;
+        /* --icon-height: 1rem; */
     }
 
-    /* .theme-container {
-        height: calc(var(--icon-height) * 1.5);
-        width: calc(var(--icon-height) * 1.5);
-    } */
+    .theme-container {
+        --icon-height: 1rem;
+    }
+    body:has(#book-toggle:checked) .book-toggle-icon {
+        --icon-height: 1rem;
+        translate: 0 15%;
+    }
 
     .books-display {
         padding: var(--padding-medium);
         grid-auto-rows: min-content;
+    }
+
+    .main-container:has(#book-toggle:checked) .books-display {
+        padding-right: var(--padding-medium);
     }
 
     .card {

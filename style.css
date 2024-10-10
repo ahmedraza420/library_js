@@ -14,6 +14,8 @@
     --header-height: 6rem;
     --card-min-height: 15rem;
     --card-min-width: 20rem;
+    --card-max-width: 30rem;
+    --card-desc-min-width: 9rem;
     --card-title-min-height: 5rem;
     --card-status-height: 2rem;
     --progress-height: 0.6rem;
@@ -182,7 +184,7 @@ body:has(#book-toggle:checked) .book-toggle-heading {
 }
 
 .card-wrapper {
-    max-width: 30rem;
+    max-width: var(--card-max-width);
 }
 
 .card {   
@@ -192,7 +194,7 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     min-height: var(--card-min-height);
     min-width: fit-content;
     display: grid;
-    grid-template-columns: 3fr minmax(9rem , 4fr);
+    grid-template-columns: 3fr minmax(var(--card-desc-min-width) , 4fr);
     gap: var(--gap-normal);
     background: var(--bg-accent);
     box-shadow: 0.1rem 0.1rem  0.2rem var(--shadow-color-2);; 
@@ -288,8 +290,8 @@ appearance: none;
 }
 
 .card-description {
-    display: flex;
-    flex-flow: column nowrap;
+    display: grid;
+    /* flex-flow: column nowrap; */
     grid-column: 2;
 }
 
@@ -426,8 +428,17 @@ form label {
     position: relative;
 }
 
-form label, form button {
+form label, form .error {
     margin-top: var(--input-height);
+}
+
+form button {
+    margin-top: calc(var(--input-height) / 2);
+}
+
+.error {
+    color: var(--color-warning);
+
 }
 
 .required {
@@ -488,6 +499,11 @@ form label:has(label .label) .label {
     top: calc(-1 * var(--input-height) + var(--margin-normal));
 }
 
+form label:has(label .label) label:hover .label {
+    opacity: 1;
+    scale: 1.05;
+}
+
 form label:has(label) {
     display: flex;
     justify-content: space-between;
@@ -538,6 +554,7 @@ form button:active {
 @media only screen and (max-width: 750px) {
     :root {
         --sidebar-width: 18rem;
+        font-size: 15px;
     }
 
     header {
@@ -552,7 +569,7 @@ form button:active {
         position: absolute;
         right: 0;
         background: var(--bg-primary-500);
-        backdrop-filter: blur(7px);
+        backdrop-filter: blur(5px);
     }
 
     .sidebar:has(#book-toggle:checked) .form-wrapper {
@@ -560,4 +577,43 @@ form button:active {
         padding-inline: var(--padding-large);
     }
 
+    form .label {
+        font-weight: 600;
+    }
+
+}
+
+@media only screen and (max-width: 450px) {
+    :root {
+        --card-min-width: 16rem;
+        --card-max-width: 23rem;
+        --card-desc-min-width: 7rem;
+    }
+
+    .books-display {
+        padding: var(--padding-medium);
+        grid-auto-rows: min-content;
+    }
+
+    .card {
+        padding: var(--padding-normal);
+        height: 100%;   
+        grid-template-columns: 5fr minmax(var(--card-desc-min-width), 4fr);
+        grid-template-rows: min-content;
+        align-content: center;
+    }
+
+    .card-status-wrapper {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .card-remove {
+        grid-row: 1;    
+        justify-self: end;
+    }
+
+    .card-title {
+        margin-top: 0;
+    }
 }

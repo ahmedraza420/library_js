@@ -9,6 +9,7 @@ const inputCurrPage = document.querySelector('#current-page');
 const inputPubDate = document.querySelector('#publish-date');
 const booksDisplay = document.querySelector('.books-display');
 const resetButton = document.querySelector('#form-reset');
+const errorOutput = document.querySelector('.error');
 
 let myLibrary = [];
 let booksDeleted = [];  // could be used to undo a mistake
@@ -28,7 +29,7 @@ function Book(image, title, author, pages, status, currentPage, publishDate) {
 
 function addBookToLibrary() {
     
-    let inputStatus = 'not-read';
+    let inputStatus;
     statusInputs.forEach(i => {
         if(i.checked == true) {
             inputStatus = i.getAttribute('id');
@@ -41,15 +42,32 @@ function addBookToLibrary() {
     else {
         currentPage = inputCurrPage.value;
     }
+
     // REMINDER: need to output the validation errors
-    if (inputTitle.value != '' && inputAuthor.value != '' && inputPages.value != '' && parseInt(inputPages.value) > 0  && inputStatus && inputPubDate.value != '' && parseInt(inputPages.value) >= parseInt(currentPage)) {
+    if (inputTitle.value != '' && inputAuthor.value != '' && inputPages.value != '' && parseInt(inputPages.value) > 0  && inputStatus && inputPubDate.value != '' && parseInt(inputPages.value) >= parseInt(currentPage) && parseInt(currentPage) >= 0) {
         
         const bookToAdd = new Book(inputImage.value, inputTitle.value, inputAuthor.value, inputPages.value, inputStatus, currentPage, inputPubDate.value);
         
-        if (!myLibrary.some(book => book.title == bookToAdd.title && book.author == bookToAdd.author)) {
+        if (!myLibrary.some(book => book.title.toLowerCase() == bookToAdd.title.toLowerCase() && book.author.toLowerCase() == bookToAdd.author.toLowerCase())) {
             myLibrary.push(bookToAdd);
             refreshCards();
+            errorOutput.innerText = '';
+            resetButton.click();
         }
+        else {
+            errorOutput.innerText = `A book named ${bookToAdd.title} written by ${bookToAdd.author} already exists.`;
+        }
+    }
+    else if (inputTitle.value == '' || inputAuthor.value == '' || inputPages.value == '' || !inputStatus || inputPubDate.value == '') {
+        errorOutput.innerText = `Please fill all the required inputs. The required inputs are marked with an asterisk (*).`;
+    }
+    else if (parseInt(inputPages.value) <= 0 || currentPage < 0) {
+        errorOutput.innerText = `A negative number, seriously?`
+        errorOutput.innerHTML += '<br>';
+        errorOutput.innerText += `A book may have a negative number of pages in an alternate univerese, but not here.`;
+    }
+    else if (inputStatus == 'reading' && (parseInt(inputPages.value) < parseInt(currentPage))) {
+        errorOutput.innerText = `You can't read ${currentPage} pages of a book that has ${inputPages.value} pages. The title page doesn't count.`
     }
 }
 
@@ -127,7 +145,6 @@ function createCard(item, index) {
 form.addEventListener('submit', e => {
     e.preventDefault();
     addBookToLibrary();
-    resetButton.click();
 });
 
 function refreshCards () {

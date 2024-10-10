@@ -467,7 +467,7 @@ appearance: none;
 
 .sidebar:has(#book-toggle:checked) .form-wrapper {
     position: fixed;
-    overflow: hidden;
+    overflow: auto;
     height: calc(100svh - var(--header-height));
     width: var(--sidebar-width);
     padding-block: var(--padding-large);

@@ -1,10 +1,10 @@
 const body = document.querySelector('body');
-const form = document.querySelector('form');
+const form = document.querySelector('#book-form');
 const inputImage = document.querySelector('#image-url');
 const inputTitle = document.querySelector('#title');
 const inputAuthor = document.querySelector('#author');
 const inputPages = document.querySelector('#pages');
-const statusInputs = document.querySelectorAll('input[name="status"]'); 
+const statusInputs = document.querySelectorAll('input[name="status"]');
 const inputCurrPage = document.querySelector('#current-page');
 const inputPubDate = document.querySelector('#publish-date');
 const booksDisplay = document.querySelector('.books-display');
@@ -19,6 +19,7 @@ myLibrary.push(new Book("https://i0.wp.com/americanwritersmuseum.org/wp-content/
 myLibrary.push(new Book("https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1409600899i/9723667.jpg", "And Then There Were None", "Agatha Christie", "272", "read", '0', '1939-11-06'));
 
 function Book(image, title, author, pages, status, currentPage, publishDate) {
+    this.id = crypto.randomUUID();
     this.image = image;
     this.title = title;
     this.author = author;
@@ -28,47 +29,40 @@ function Book(image, title, author, pages, status, currentPage, publishDate) {
     this.publishDate = publishDate;
 }
 
-function addBookToLibrary() {
-    
-    let inputStatus;
-    statusInputs.forEach(i => {
-        if(i.checked == true) {
-            inputStatus = i.getAttribute('id');
-        }
-    });
-    let currentPage;
-    if(inputStatus != 'reading' || inputCurrPage.value == '') { 
-        currentPage = 0;
+// validate the form inputs
+function Validate(data) {
+    data.pages = parseInt(data.pages);
+    data.currentPage = parseInt(data.currentPage);
+    if (data.title.trim() == '') return 'Title is required';
+    if (data.author.trim() == '') return 'Author is required';
+    if (data.pages <= 0) return 'Seriously?\nA book may have zero or negative number of pages in an alternate univerese, but not here.';
+    if (data.status == '') return 'Select a status';
+    if (data.publishDate == '') return 'Publication date is required';
+    if (data.status == 'Reading') {
+        if (data.currentPage == '') return 'Current page is required if you are reading the book';
+        if (!isNaN(data.currentPage) && parseInt(data.currentPage) < 0) return 'Current page cannot be negative';
+        if (data.currentPage > data.pages) return 'Pages read cannot exceed total pages';
     }
-    else {
-        currentPage = inputCurrPage.value;
-    }
+    return true;
+}
 
-    // REMINDER: need to output the validation errors
-    if (inputTitle.value != '' && inputAuthor.value != '' && inputPages.value != '' && parseInt(inputPages.value) > 0  && inputStatus && inputPubDate.value != '' && parseInt(inputPages.value) >= parseInt(currentPage) && parseInt(currentPage) >= 0) {
-        
-        const bookToAdd = new Book(inputImage.value, inputTitle.value, inputAuthor.value, inputPages.value, inputStatus, currentPage, inputPubDate.value);
-        
-        if (!myLibrary.some(book => book.title.toLowerCase() == bookToAdd.title.toLowerCase() && book.author.toLowerCase() == bookToAdd.author.toLowerCase())) {
-            myLibrary.push(bookToAdd);
-            refreshCards();
-            errorOutput.innerText = '';
-            resetButton.click();
+function addBookToLibrary(data) {
+    console.log(data);
+    //REMINDER: need to output the validation errors [done]
+    const validateStatus = Validate(data);
+    if (validateStatus === true) {
+        errorOutput.innerText = '';
+        if (myLibrary.some(book => book.title.toLowerCase() == data.title.toLowerCase() && book.author.toLowerCase() == data.author.toLowerCase())) {
+            errorOutput.innerText = `A book named ${data.title} written by ${data.author} already exists.`;
         }
         else {
-            errorOutput.innerText = `A book named ${bookToAdd.title} written by ${bookToAdd.author} already exists.`;
+            myLibrary.push(new Book(data.image, data.title, data.author, data.pages, data.status, currentPage = data.status == 'Reading' ? data.currentPage || 0 : 0, data.publishDate));
+            refreshCards();
+            resetButton.click();
         }
     }
-    else if (inputTitle.value == '' || inputAuthor.value == '' || inputPages.value == '' || !inputStatus || inputPubDate.value == '') {
-        errorOutput.innerText = `Please fill all the required inputs. The required inputs are marked with an asterisk (*).`;
-    }
-    else if (parseInt(inputPages.value) <= 0 || currentPage < 0) {
-        errorOutput.innerText = `A negative number, seriously?`
-        errorOutput.innerHTML += '<br>';
-        errorOutput.innerText += `A book may have a negative number of pages in an alternate univerese, but not here.`;
-    }
-    else if (inputStatus == 'reading' && (parseInt(inputPages.value) < parseInt(currentPage))) {
-        errorOutput.innerText = `You can't read ${currentPage} pages of a book that has ${inputPages.value} pages. The title page doesn't count.`
+    else {
+        errorOutput.innerText = validateStatus;
     }
 }
 
@@ -115,7 +109,7 @@ function createCard(item, index) {
                     </div>
     `;
     cardWrap.innerHTML = card;
-    
+
     cardWrap.querySelector('.card-image').setAttribute('src', item.image);
     cardWrap.querySelector('.card-title').innerText = item.title;
     cardWrap.querySelector('.card-author').innerText = item.author;
@@ -126,40 +120,40 @@ function createCard(item, index) {
         cardWrap.querySelector('.card-pages').innerText = item.pages + " Page";
     }
     cardWrap.querySelector('.card-published').innerText = item.publishDate;
-    
-    const cardDesc = cardWrap.querySelector('.card-description');    
-    
+
+    const cardDesc = cardWrap.querySelector('.card-description');
+
     statusCheckboxToggle(cardWrap.querySelector('.card-change-status-wrapper'));
     selectStatusOption(item, cardDesc, cardWrap.querySelectorAll('.card-status-option'));
     setReadingStatus(item, cardDesc);
     setButtonActions(item, cardDesc);
-    if (item.status != "reading") 
-        {
-            cardDesc.querySelector('.card-reading').style.visibility = 'hidden';
-        }
+    if (item.status != "reading") {
+        cardDesc.querySelector('.card-reading').style.visibility = 'hidden';
+    }
 
-    cardWrap.querySelector("#removeCardBtn").addEventListener('click', () => {deleteBook(cardWrap)});
-        
+    cardWrap.querySelector("#removeCardBtn").addEventListener('click', () => { deleteBook(cardWrap) });
+
     booksDisplay.appendChild(cardWrap);
 }
 
 form.addEventListener('submit', e => {
     e.preventDefault();
-    addBookToLibrary();
+    const formData = new FormData(form);
+    addBookToLibrary(Object.fromEntries(formData.entries()));
 });
 
-function refreshCards () {
-    document.querySelectorAll('.card-wrapper').forEach(item => {item.remove()});
-    
+function refreshCards() {
+    document.querySelectorAll('.card-wrapper').forEach(item => { item.remove() });
+
     for (i in myLibrary) {
         createCard(myLibrary[i], i);
     }
-} 
+}
 
 function statusCheckboxToggle(element) {
     const checkBox = element.querySelector(".card-change-status");
     element.addEventListener('click', e => {
-        if (checkBox.checked == true){
+        if (checkBox.checked == true) {
             checkBox.checked = false;
         }
         else {
@@ -168,31 +162,29 @@ function statusCheckboxToggle(element) {
     });
 }
 
-function selectStatusOption(book, cardDesc, statusOptions)
-{
+function selectStatusOption(book, cardDesc, statusOptions) {
     statusOptions.forEach(i => {
-        if(i.getAttribute('data-state') == book.status)
-        {
+        if (i.getAttribute('data-state') == book.status) {
             i.classList.add('active');
         }
     });
 
     statusOptions.forEach(item => {
         item.addEventListener('click', e => {
-        statusOptions.forEach(i => {i.classList.remove('active')});
-        item.classList.add('active');
+            statusOptions.forEach(i => { i.classList.remove('active') });
+            item.classList.add('active');
 
-        if (item.getAttribute('data-state') != book.status) {
-            book.status = item.getAttribute('data-state');
-        }
+            if (item.getAttribute('data-state') != book.status) {
+                book.status = item.getAttribute('data-state');
+            }
 
-        if (item.getAttribute('data-state') == 'reading') {
-            setReadingStatus(book, cardDesc);
-            cardDesc.querySelector('.card-reading').style.visibility = 'visible';
-        }
-        else {
-            cardDesc.querySelector('.card-reading').style.visibility = 'hidden';
-        }
+            if (item.getAttribute('data-state') == 'reading') {
+                setReadingStatus(book, cardDesc);
+                cardDesc.querySelector('.card-reading').style.visibility = 'visible';
+            }
+            else {
+                cardDesc.querySelector('.card-reading').style.visibility = 'hidden';
+            }
         });
     });
 }
@@ -205,60 +197,60 @@ function setReadingStatus(book, cardDesc) {
         progress.setAttribute('max', book.pages);
         progress.setAttribute('value', book.currentPage);
         pageNumReading.innerText = book.currentPage;
-        
+
         progress.addEventListener('input', () => {
-            progress.setAttribute('value', progress.value);   
+            progress.setAttribute('value', progress.value);
             if (parseInt(progress.value) <= parseInt(book.pages) && parseInt(progress.value) >= 0) {
                 pageNumReading.innerText = progress.value;
                 book.currentPage = progress.value;
-            }   
+            }
         });
     }
 }
 // Problem: the value of the book Objects should Decrease, and the progress bar and pageNumReading should update according to the book's currentPage.
-function setButtonActions (book, cardDesc) {
-        const progress = cardDesc.querySelector('.card-reading-progress');
-        const pageNumReading = cardDesc.querySelector('.card-reading-number');
-        const subBtn = cardDesc.querySelector("#subPageBtn");
-        const addBtn = cardDesc.querySelector('#addPageBtn');
+function setButtonActions(book, cardDesc) {
+    const progress = cardDesc.querySelector('.card-reading-progress');
+    const pageNumReading = cardDesc.querySelector('.card-reading-number');
+    const subBtn = cardDesc.querySelector("#subPageBtn");
+    const addBtn = cardDesc.querySelector('#addPageBtn');
 
-        subBtn.addEventListener('mousedown', () => {
-            const pagePrevious = () => {
-                if (book.status == 'reading') {
-                    if (parseInt(progress.value) > 0) {
-                        progress.value--;
-                        book.currentPage = progress.value;
-                        pageNumReading.innerText = book.currentPage;
-                    }
-                }
-            }; 
-            pagePrevious();
-            buttonHold(pagePrevious, subBtn);
-        });
-        
-        addBtn.addEventListener('mousedown', () => {
-            const pageNext = () => {
-                if (book.status == 'reading') {
-                    progress.value++;
-                    if (parseInt(progress.value) <= parseInt(book.pages)){
-                        book.currentPage = progress.value;
-                    }
+    subBtn.addEventListener('mousedown', () => {
+        const pagePrevious = () => {
+            if (book.status == 'reading') {
+                if (parseInt(progress.value) > 0) {
+                    progress.value--;
+                    book.currentPage = progress.value;
                     pageNumReading.innerText = book.currentPage;
                 }
-            };
-            pageNext();
-            buttonHold(pageNext, addBtn);
-        });
+            }
+        };
+        pagePrevious();
+        buttonHold(pagePrevious, subBtn);
+    });
+
+    addBtn.addEventListener('mousedown', () => {
+        const pageNext = () => {
+            if (book.status == 'reading') {
+                progress.value++;
+                if (parseInt(progress.value) <= parseInt(book.pages)) {
+                    book.currentPage = progress.value;
+                }
+                pageNumReading.innerText = book.currentPage;
+            }
+        };
+        pageNext();
+        buttonHold(pageNext, addBtn);
+    });
 }
 
 function buttonHold(holdFunction, holdElement) {
     const holdInterval = setInterval(holdFunction, 200);
-        holdElement.addEventListener('mouseup', () => {
-            clearInterval(holdInterval)
-        });
+    holdElement.addEventListener('mouseup', () => {
+        clearInterval(holdInterval)
+    });
 }
 
-function deleteBook (cardWrap) {
+function deleteBook(cardWrap) {
     booksDeleted.push(myLibrary.splice(cardWrap.dataset.index, 1)[0]);
     refreshCards();
 }

@@ -4,15 +4,15 @@
     --bg-primary: #fbf9f1;
     --bg-primary-500: rgb(251 249 241 / 0.5);
     --bg-secondary: #E3E1D9;
-    --bg-accent: #d4cfc1;
+    --bg-accent: rgba(212, 207, 193, 0.99);
     /* --bg-accent: #CCD3CA; */
     /* --bg-accent: #B7C4CF; */
-    --bg-accent-2: rgba(82, 93, 58, 0.668);
+    --bg-accent-2: rgba(112, 125, 97, 0.7);
     --bg-accent-2-hovered: #668082;
     --bg-accent-3: #DDDDDD;
     --bg-card: #F7EED3;
     --txt-primary: #705C53;
-    --color-warning: rgb(171, 44, 44);
+    --color-warning: rgb(214, 22, 22);
     --header-height: 6rem;
     --card-min-height: 15rem;
     --card-min-width: 20rem;
@@ -31,7 +31,7 @@
     --padding-large: 2rem;
     --margin-small: 0.25rem; 
     --margin-normal: 0.5rem; 
-    --margin-medium: 1rem; 
+    --margin-medium: 0.75rem; 
     --margin-large: 2rem; 
     --b-radius-small: 0.25rem;
     --b-radius-normal: 0.5rem;
@@ -61,7 +61,7 @@ body {
 body:has(.theme-toggle:checked) {
     --bg-primary: #181C14;
     --bg-primary-500: rgba(24 28 20 / 0.5);
-    --bg-accent: #3C3D37;
+    --bg-accent: rgba(60, 61, 55, 0.99);
     --txt-primary: #DCD7C9;
     --shadow-color: rgb(0 0 0 / 0.4);
     --shadow-color-2: rgb(0 0 0 / 0.6);
@@ -107,7 +107,7 @@ p {
 }
 
 input[type='range'] {
-    accent-color: var(--bg-primary);
+    accent-color: var(--bg-accent-2);
     width: 100%;
 }
 
@@ -118,7 +118,7 @@ input[type='range']::-webkit-slider-thumb {
 header {
     z-index: 3;
     position: fixed;
-    padding-block: var(--paddinglarge);
+    padding-block: var(--padding-normal);
     padding-inline: calc(var(--padding-large) * 2) var(--padding-large);
     height: var(--header-height);
     /* width: 100svw; */
@@ -262,13 +262,28 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     transition: all var(--trans-t-normal) ease;
 }
 
+.noBooks {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    font-weight: 500;
+    color: var(--txt-primary);
+    filter: opacity(0.4);
+}
+
 .main-container:has(#book-toggle:checked) .books-display {
     padding-right: var(--padding-large);
 }
-
+/* 
 .card-wrapper {
-    max-width: var(--card-max-width);
-}
+    
+} */
 
 .card {   
     position: relative;
@@ -276,7 +291,8 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     padding: var(--padding-medium);
     min-height: var(--card-min-height);
     height: 100%;
-    min-width: fit-content;
+    /* min-width: fit-content; */
+    max-width: var(--card-max-width);
     display: grid;
     grid-template-columns: 3fr minmax(var(--card-desc-min-width) , 4fr);
     gap: var(--gap-normal);
@@ -289,17 +305,119 @@ body:has(#book-toggle:checked) .book-toggle-heading {
     font-size: 0.9rem;
 }
 
-.card-page-change-button, .card-button {
+.card-page-change-button, .card-remove {
     border: none;
     height: min-content;
     display: flex;
     align-items: center;
     background: transparent;
+    cursor: pointer;
 }
 
-.card-button {
+.card-remove {
     padding: 0;
 }
+
+.card-status-display {
+    position: relative;
+    min-height: var(--card-status-height);
+    display: flex;
+}
+
+.status-dropdown {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    /* min-height: var(--card-status-height); */
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    border-radius: var(--b-radius-normal);
+    transition: box-shadow var(--trans-t-small) ease;
+}
+
+.status-dropdown:has(:focus, .status-trigger[data-open='true']) {
+    box-shadow: 0 0 0.3rem var(--shadow-color-2);
+}
+
+.status-dropdown:has(:hover) {
+    box-shadow: 0 0  0.4rem var(--shadow-color-2);
+}
+
+.status-dropdown:has(:focus) .status-trigger {
+    filter: brightness(130%);
+}
+
+.status-dropdown:has(:hover) .status-trigger {
+    filter: brightness(150%);
+}
+
+.status-trigger {
+    /* position: relative;
+    z-index: 1; */
+    gap: var(--gap-small);
+    /* margin-block: 0.1rem; */
+    border-radius: var(--b-radius-normal);
+    padding: 0;
+    border: none;
+    height: var(--card-status-height);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-weight: 700;
+    color: inherit;
+    border-radius: var(--b-radius-normal);
+    /* width: 100%; */
+    /* display: grid;
+    grid-auto-rows: var(--card-status-height); */
+    cursor: pointer;
+    background-color: var(--bg-accent);
+    filter: brightness(120%);
+    list-style-type: none;
+    transition: background-color var(--trans-t-small) ease,
+                box-shadow var(--trans-t-small) ease,
+                filter var(--trans-t-small) ease;
+}
+
+.status-trigger[data-open='true'] {
+    border-radius: var(--b-radius-normal) var(--b-radius-normal) 0 0;
+}
+
+.status-text {
+    margin: auto;
+}
+
+.status-menu {
+    margin-block: 0;
+    border-radius: 0 0 var(--b-radius-normal) var(--b-radius-normal);
+    padding: 0;
+    width: 100%;
+    font-weight: 500;
+    display: grid;
+    grid-auto-rows: var(--card-status-height);
+    background: var(--bg-accent);
+    filter: brightness(110%);
+    list-style-type: none;
+}
+
+.status-menu li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: backdrop-filter var(--trans-t-small) ease;
+}
+
+.status-dropdown:has(.status-trigger[data-open='false']) .status-menu {
+    display: none;
+}
+
+.status-menu li:hover {
+    /* background: inherit; */
+    backdrop-filter: brightness(160%);
+}
+
 
 .card-page-change-button {
     fill: var(--txt-primary);
@@ -312,59 +430,6 @@ body:has(#book-toggle:checked) .book-toggle-heading {
 .card-page-change-button:hover {
     backdrop-filter: brightness(80%);
 }
-
-.card-change-status {
-display: none;
-appearance: none;
-}
-
-.card-change-status-wrapper {
-    position: relative; 
-    height: var(--card-status-height);
-    display: flex;
-    justify-content: end;
-    align-items: center;
-}
-            
-.card-status-options {
-    position: absolute;
-    top: 0;
-    overflow: hidden;
-    margin-block: 0;
-    border-radius: var(--b-radius-normal);
-    padding: 0;
-    width: 100%;
-    display: grid;
-    grid-auto-rows: var(--card-status-height);
-    background: var(--bg-accent);
-    list-style-type: none;
-}
-
-.card-status-option:is(.active) {
-    grid-row: 1;
-}
-
-.card-change-status-wrapper:has(.card-change-status:checked) .card-status-options {
-    box-shadow: 0.1rem 0.1rem 0.3rem grey;
-}
-
-.card-change-status-wrapper:not(:has(.card-change-status:checked)) .card-status-option:not(.active) {
-    display: none;
-}
-    
-.card-status-option{
-        border: none;
-        padding: 0 var(--padding-small);
-        text-align: center;
-        color: inherit;
-        background: transparent;
-        backdrop-filter: brightness(120%);
-        transition: all var(--trans-t-small) ease;
-}    
-
-.card-status-option:hover {
-    backdrop-filter: brightness(80%);
-} 
 
 .more-icon {
     z-index: 1;
@@ -502,12 +567,13 @@ form {
     transition: all var(--trans-t-medium) ease, color none;
 }
 
-form label {
+form label, form .status-container {
     height: var(--input-height);
     position: relative;
 }
 
 form label, form .error {
+/*form .status-container {*/
     margin-top: var(--input-height);
 }
 
@@ -530,7 +596,7 @@ form label input {
     padding-left: var(--padding-normal);
     color: var(--txt-primary);
     background-color: var(--bg-primary);
-    filter: brightness(80%);
+    filter: brightness(90%);
     border-radius: var(--b-radius-small);
 }
 
@@ -542,13 +608,13 @@ form label input:not([name="status"]) {
     width: 100%;
 }
 
-form  label .label{
+form label .label, form .status-label{
     position: absolute;
     z-index: 1;
     top: calc((var(--input-height) - 1rem) / 2);
-    left: var(--margin-small);
+    left: var(--margin-medium);
     scale: 1.05;
-    transition: all var(--trans-t-medium) ease-in-out, color none;
+    transition: all var(--trans-t-normal) ease-in-out; 
 }
 
 form label:is([for='publish-date']) .label {
@@ -556,13 +622,13 @@ form label:is([for='publish-date']) .label {
     left: 0;
 }
 
-form label:not([for='publish-date'], :has(label input)):focus-within .label, form label:not([for='publish-date'], :has(input:placeholder-shown), label input) .label  {
+form label:not([for='publish-date'], :has(label input)):focus-within .label, form label:not([for='publish-date'], :has(input:placeholder-shown), label input) .label, form .status-label  {
     top: calc(-1 * var(--input-height) + 1.25rem / 2);
     left: 0;
     transition: all var(--trans-t-normal) ease-in-out;
 }
 
-form label:not(:has(input:placeholder-shown), :focus-within) .label {
+form label:not(:has(input:placeholder-shown), :focus-within) .label, form .status-container:not(:has(:focus-within)) .status-label {
     opacity: 0.7;
     scale: 1;
 }
@@ -577,41 +643,44 @@ form label[for='publish-date'] input {
     line-height: 2;
 }
 
-form label:has(label .label) {
-    margin-top: calc(var(--input-height) + var(--margin-normal));
-}
-
-form label:has(label .label) .label {
-    top: calc(-1 * var(--input-height) + var(--margin-normal));
-}
-
-form label:has(label .label) label:hover .label {
-    opacity: 1;
-    scale: 1.05;
-}
-
-form label:has(label) {
+form .status-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: var(--gap-medium);
+    margin-top: calc(var(--input-height) + var(--margin-normal));
 }
 
-form label label:has(input) {
+form .status-container .label {
+    position: static;
+    top: calc(-1 * var(--input-height) + var(--margin-normal));
+}
+
+form .status-label {
+    top: calc(-1 * var(--input-height) + var(--margin-normal));
+}
+
+form .status-container label:hover .label {
+    opacity: 1;
+    scale: 1.05;
+}
+
+
+form .status-container label:has(input) {
     margin-top: 0;
     display: flex;
     flex-flow: column nowrap;
 }
 
-form label label .label {
+/* form label label .label {
     position: static;
-}
+} */
 
 form label:has(#current-page) {
     display: none;
 }
 
-form label:has(#reading:checked) ~ label:has(#current-page) {
+form .status-container:has(#reading:checked) ~ label:has(#current-page) {
     display: flex;
 }
 
